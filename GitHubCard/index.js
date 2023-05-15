@@ -1,8 +1,15 @@
+import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+axios.get("https://api.github.com/users/HippyHoboJesus")
+.then(res => {
+  cards.appendChild(gitCard(res))
+  console.log(res)
+})
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +35,15 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+followersArray.forEach( user => {
+  axios.get(`https://api.github.com/users/${user}`)
+  .then(res => {
+    cards.appendChild(gitCard(res))
+})
+})
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +64,52 @@ const followersArray = [];
       </div>
     </div>
 */
+const cards = document.querySelector('.cards')
+function gitCard(obj) {
+  const dcard = document.createElement("div")
+  const img = document.createElement("img")
+  const dinfo = document.createElement("div")
+  const hname = document.createElement("h3")
+  const pusername = document.createElement("p")
+  const plocation = document.createElement("p")
+  const pprofile = document.createElement("p")
+  const a = document.createElement("a")
+  const pfollowers = document.createElement("p")
+  const pfollowing = document.createElement("p")
+  const pbio = document.createElement("p")
+
+  dcard.classList.add('card')
+  dinfo.classList.add('card-info')
+  hname.classList.add('name')
+  pusername.classList.add('username')
+
+
+  dcard.appendChild(img)
+  dcard.appendChild(dinfo)
+  dinfo.appendChild(hname)
+  dinfo.appendChild(pusername)
+  dinfo.appendChild(plocation)
+  dinfo.appendChild(pprofile)
+  dinfo.appendChild(pfollowers)
+  dinfo.appendChild(pfollowing)
+  dinfo.appendChild(pbio)
+  pprofile.appendChild(a)
+
+  img.src = obj.data.avatar_url
+
+  hname.textContent = `${obj.data.name}`
+  pusername.textContent = `${obj.data.login}`
+  plocation.textContent = `${obj.data.location}`
+  a.href = obj.data.html_url
+  a.textContent = `${obj.data.html_url}`
+  pfollowers.textContent = `Followers: ${obj.data.followers}`
+  pfollowing.textContent = `Following: ${obj.data.following}`
+  pbio.textContent =  `${obj.data.bio}`
+
+
+  return dcard
+
+}
 
 /*
   List of LS Instructors Github username's:
